@@ -4,7 +4,7 @@ package com.advance.library.personal;
  * Created by Hongd on 2017/3/27.
  */
 
-public class AllSMSInfo {
+public class SMSInfo {
 
   private String strAddress;
   private String strBody;
@@ -43,7 +43,7 @@ public class AllSMSInfo {
     this.strType = strType;
   }
 
-  public AllSMSInfo() {
+  public SMSInfo() {
 
   }
 }

@@ -33,7 +33,7 @@ import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.Groups;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
-import com.advance.library.personal.AllSMSInfo;
+import com.advance.library.personal.SMSInfo;
 import com.advance.library.personal.AppsInfo;
 import com.advance.library.personal.BrowserHistoryInfo;
 import com.advance.library.personal.CallHistoryInfo;
@@ -333,7 +333,7 @@ public class PhoneInfoUtils {
    * Date: 2017/3/20 15:42 <br>
    */
   public static JSONArray buildAllSms(Context context) throws JSONException {
-    ArrayList<AllSMSInfo> allSmsInfoList = new ArrayList<>();
+    ArrayList<SMSInfo> allSmsInfoList = new ArrayList<>();
     final String SMS_URI_ALL = "content://sms/"; // 所有短信
     Uri uri = Uri.parse(SMS_URI_ALL);
     String[] projection = new String[]{"_id", "address", "person",
@@ -342,7 +342,7 @@ public class PhoneInfoUtils {
         null, "date desc");
     if (cur.moveToFirst()) {
       do {
-        AllSMSInfo allSmsInfo = new AllSMSInfo();
+        SMSInfo allSmsInfo = new SMSInfo();
         int intType = cur.getInt(cur.getColumnIndex("type"));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String strType;
@@ -377,7 +377,7 @@ public class PhoneInfoUtils {
     }
     JSONArray array = new JSONArray();
     for (int i = 0; i < allSmsInfoList.size(); i++) {
-      AllSMSInfo appInfo = allSmsInfoList.get(i);
+      SMSInfo appInfo = allSmsInfoList.get(i);
       JSONObject stoneObject = new JSONObject();
       stoneObject.put("address", appInfo.getStrAddress());
       stoneObject.put("body", appInfo.getStrBody());
