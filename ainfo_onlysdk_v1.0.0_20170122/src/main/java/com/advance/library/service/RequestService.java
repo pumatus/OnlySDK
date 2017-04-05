@@ -67,10 +67,10 @@ public class RequestService extends Service {
     startForeground(1, new Notification());
 
     alarmManagerOne
-        .setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis(12, 53), (24 * 60 * 60 * 1000),
+        .setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis(10, 0), (24 * 60 * 60 * 1000),
             pendingIntentOne);
     alarmManagerTwo
-        .setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis(13, 0), (24 * 60 * 60 * 1000),
+        .setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis(2, 0), (24 * 60 * 60 * 1000),
             pendingIntentTwo);
 
     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
