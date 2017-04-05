@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/OnlySDK.iml" filepath="$PROJECT_DIR$/OnlySDK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ainfo_onlysdk_v1.0.0_20170122/ainfo_onlysdk_v1.0.0_20170122.iml" filepath="$PROJECT_DIR$/ainfo_onlysdk_v1.0.0_20170122/ainfo_onlysdk_v1.0.0_20170122.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+    </modules>
+  </component>
+</project>
