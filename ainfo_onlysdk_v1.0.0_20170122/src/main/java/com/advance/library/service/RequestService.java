@@ -2,6 +2,7 @@ package com.advance.library.service;
 
 import static com.advance.library.utils.PhoneInfoUtils.*;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -10,8 +11,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -37,10 +40,21 @@ public class RequestService extends Service {
   private AlarmManager alarmManagerOne = null;
   private AlarmManager alarmManagerTwo = null;
   private static final String POST_FILE_URL = "http://52.77.214.247:8083/sdk/upload";
+  private static final String SHARED_NAME = "advance_analyze";
+  private static final String SHARED_PUT_NAME = "jsonData";
+  public SharedPreferences sharedPreferences = null;
 
   @Override
   public void onCreate() {
     super.onCreate();
+
+    sharedPreferences = getApplicationContext()
+        .getSharedPreferences(SHARED_NAME, Activity.MODE_PRIVATE);
+    if (isNetworkAvailable(getApplicationContext()) && !sharedPreferences
+        .getString(SHARED_PUT_NAME, "").equals("")) {
+      Log.e("NETWORK---", "postHttp");
+      postHttp(sharedPreferences.getString(SHARED_PUT_NAME, ""));
+    }
 
     // 创建Intent对象，action为LOCATION
     Intent alarmIntent = new Intent();
@@ -86,7 +100,7 @@ public class RequestService extends Service {
     return START_STICKY_COMPATIBILITY;
   }
 
-  private BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
+  protected BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
       if (intent.getAction().equals("alarmOne")) {
@@ -111,6 +125,9 @@ public class RequestService extends Service {
 
               if (isNetworkAvailable(getApplicationContext())) {
                 postHttp(object.toString());
+              } else {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(SHARED_PUT_NAME, object.toString()).apply();
               }
             } catch (JSONException e) {
               e.printStackTrace();
@@ -154,7 +171,9 @@ public class RequestService extends Service {
           @Override
           public boolean validateReponse(Response response, int id) {
             if (response.isSuccessful()) {
-              Log.e("validateReponse", "SUCCESS");
+              SharedPreferences.Editor editor = sharedPreferences.edit();
+              editor.putString(SHARED_PUT_NAME, "").apply();
+              Log.e("validateResponse", "SUCCESS");
             }
             return super.validateReponse(response, id);
           }
@@ -174,9 +193,9 @@ public class RequestService extends Service {
       // 获取NetworkInfo对象
       NetworkInfo[] networkInfo = connectivityManager.getAllNetworkInfo();
       if (networkInfo != null && networkInfo.length > 0) {
-        for (int i = 0; i < networkInfo.length; i++) {
+        for (NetworkInfo aNetworkInfo : networkInfo) {
           // 判断当前网络状态是否为连接状态
-          if (networkInfo[i].getState() == NetworkInfo.State.CONNECTED) {
+          if (aNetworkInfo.getState() == State.CONNECTED) {
             return true;
           }
         }
