@@ -1,3 +1,8 @@
 <resources>
   <string name="app_name">AInfo_OnlySDK_V1.0.0_20170122</string>
+  <string name="ok">Ok</string>
+  <string name="cancel">Cancel</string>
+  <string name="setting">Settings</string>
+  <string name="rationale_all">This application needs to access your location and contacts to understand your identity and identity.</string>
+  <string name="rationale_ask_again">This app may not work correctly without the requested permissions. Open the app setting screen to modify app permissions.</string>
 </resources>

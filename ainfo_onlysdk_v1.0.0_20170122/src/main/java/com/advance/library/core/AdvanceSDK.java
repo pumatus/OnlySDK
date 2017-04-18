@@ -5,13 +5,14 @@ import android.content.Intent;
 import com.advance.library.service.RequestService;
 
 /**
- *Description: 初始化工具类 <br>
- *Creator: Hongd <br>
- *Date: 2017/3/22 16:48 <br>
- *Email: tobu794@163.com <br>
- *Version: 1.0 <br>
+ * Description: 初始化工具类 <br>
+ * Creator: Hongd <br>
+ * Date: 2017/3/22 16:48 <br>
+ * Email: tobu794@163.com <br>
+ * Version: 1.0 <br>
  */
 public class AdvanceSDK {
+
   private static Context context;
 
   private AdvanceSDK() {
@@ -35,7 +36,9 @@ public class AdvanceSDK {
    * @return ApplicationContext
    */
   public static Context getContext() {
-    if (context != null) return context;
+    if (context != null) {
+      return context;
+    }
     throw new NullPointerException("u should init first");
   }
 }

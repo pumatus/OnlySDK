@@ -7,8 +7,8 @@
         jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="3533bded54a4b47f99da173628ea40a42a02689f">
-        <dex dex="C:\Users\Hongd\Downloads\OnlySDK\app\build\intermediates\pre-dexed\debug\classes_582644ac80c65a8b719e8774c6c5837999e912c9.jar" />
+        sha1="9c3679a332951cb09f6be9db222adbfe557374e7">
+        <dex dex="C:\Users\Hongd\Downloads\OnlySDK\app\build\intermediates\pre-dexed\release\classes_582644ac80c65a8b719e8774c6c5837999e912c9.jar" />
     </item>
 
 </items>
