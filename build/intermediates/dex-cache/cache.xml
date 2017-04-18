@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\Hongd\Downloads\OnlySDK\ainfo_onlysdk_v1.0.0_20170122\build\intermediates\bundles\default\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="9c3679a332951cb09f6be9db222adbfe557374e7">
+        <dex dex="C:\Users\Hongd\Downloads\OnlySDK\app\build\intermediates\pre-dexed\release\classes_582644ac80c65a8b719e8774c6c5837999e912c9.jar" />
+    </item>
+
+</items>

@@ -4,11 +4,11 @@ import java.security.Key;
 import javax.crypto.Cipher;
 
 /**
+ * Created by Hongd on 2017/3/31.
  * 使用DES算法对字符串进行加密解密 (加密解密的操作步骤正好相反, 参考 {@link #encrypt(String)}, {@link #decrypt(String)})
  */
 
 public class DesUtils {
-
   private static String defaultSecretKey = "advance.ai2017"; //默认密钥
   private Cipher encryptCipher = null; //加密器
   private Cipher decryptCipher = null; //解密器
@@ -35,11 +35,19 @@ public class DesUtils {
 
   /**
    * 加密 (逻辑: 1. 将要加密的字符串转换为字节数组(byte array)<br/>
+<<<<<<< HEAD
    * 2. 将第一步的字节数组作为输入使用加密器(Cipher)的doFinal方法进行加密, 返回字节数组<br/>
    * 3. 把加密后的字节数组转换成十六进制的字符串)<br/>
    *
    * @param strIn 要加密的字符串
    * @return 返回加密后的十六进制字符串
+=======
+   *            2. 将第一步的字节数组作为输入使用加密器(Cipher)的doFinal方法进行加密, 返回字节数组<br/>
+   *            3. 把加密后的字节数组转换成十六进制的字符串)<br/>
+   * @param strIn 要加密的字符串
+   * @return 返回加密后的十六进制字符串
+   * @throws Exception
+>>>>>>> dev
    */
   public String encrypt(String strIn) throws Exception {
     return byteArr2HexStr(encrypt(strIn.getBytes()));
@@ -51,8 +59,16 @@ public class DesUtils {
 
   /**
    * 解密 (逻辑: 1. 把加密后的十六进制字符串转换成字节数组(byte array)<br/>
+<<<<<<< HEAD
    * 2. 将第一步的字节数组作为输入使用加密器(Cipher)的doFinal方法进行解密, 返回字节数组(byte array)<br/>
    * 3. 把解密后的字节数组转换成字符串)<br/>
+=======
+   *            2. 将第一步的字节数组作为输入使用加密器(Cipher)的doFinal方法进行解密, 返回字节数组(byte array)<br/>
+   *            3. 把解密后的字节数组转换成字符串)<br/>
+   * @param strIn
+   * @return
+   * @throws Exception
+>>>>>>> dev
    */
   public String decrypt(String strIn) throws Exception {
     return new String(decrypt(hexStr2ByteArr(strIn)));
